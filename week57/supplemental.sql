@@ -1,6 +1,3 @@
-use database S_HASEGAWA_DB;
-use schema public;
-
 with step_one as (
     select 1 as numone,
             2 as numtwo,
@@ -16,8 +13,13 @@ select * ilike '%two'
 from step_one;
 
 
-CREATE TABLE TRANSACTION_ILIKE_TEST (
 
+-- 自分がILIKEがあって良かったと思った時
+-- カラムが多いテーブルにおいて、クライアントとカラムの論理名で会話をし、物理名が思い出せない時にも簡単に検索できました！
+-- 例えば、、、
+use database S_HASEGAWA_DB;
+use schema public;
+CREATE TABLE TRANSACTION_ILIKE_TEST (
     DUMMY_COL_129 STRING,
     DEFECT_STATE_TYPE STRING,
     DUMMY_COL_8 STRING,
@@ -246,6 +248,8 @@ from TRANSACTION_ILIKE_TEST;
 
 
 
+-- 大文字小文字を区別せずに比較し、文字列が指定したパターンに一致するかしないかを判定します。大文字と小文字を区別しない一致では、代わりに LIKE を使用します。
+-- https://docs.snowflake.com/ja/sql-reference/functions/ilike
 
 with step_one as (
     select 1 as numone,
@@ -274,14 +278,18 @@ from step_one
 where letterone ilike '%a'
 ;
 
+
+-- クエリヒストリーで構文の大文字小文字問題を解決できる時があります
 select * from snowflake.account_usage.query_history
-where query_text ilike '%create%' --110,378
--- where lower(query_text) like '%create%' -- 110,377
+where query_text ilike '%create%'
+-- where lower(query_text) like '%create%'
 and start_time >= '2024-01-01 00:00:00.000 +0900'
 ;
 
 
 
+
+-- ちょっと実験！！！
 
 with step_one as (
 select '1' as col union all
